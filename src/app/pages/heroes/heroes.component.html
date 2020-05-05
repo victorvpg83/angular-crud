@@ -1,10 +1,10 @@
-<h1>Listado de héroes</h1>
+<h1>Listado de Usuarios</h1>
 <hr>
 
 <div class="row">
     <div class="col text-right">
         <button
-            routerLink="/hero/new" 
+            routerLink="/user/new" 
             class="btn btn-primary">
             <i class="fa fa-plus"></i>
              Agregar
@@ -12,14 +12,17 @@
     </div>
 </div>
 
-<table class="table mt-3 animated fadeIn faster">
+<table 
+  *ngIf="!loading && users.length > 0"
+  class="table mt-3 animated fadeIn faster text-center animated fadeIn faster"
+>
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
         <th scope="col">Nombre</th>
         <th scope="col">Apellido</th>
         <th scope="col">Coche</th>
-        <th scope="col">Afición</th>
+        <th scope="col">Tools</th>
       </tr>
     </thead>
     <tbody>
@@ -31,13 +34,29 @@
           <label *ngIf="user.car" class="badge badge-success">Coche</label>
           <label *ngIf="!user.car" class="badge badge-danger">Sin Coche</label>
         </td>
-        <td>@mdo</td>
+        <td>
+          <button 
+            class="btn btn-info mr-1"
+            [routerLink] = "['/user', user.id]"  
+          >
+            <i class="fa fa-pen"></i>
+          </button>
+          <button 
+            class="btn btn-danger"
+            (click)="deleteUser( user, i )"
+          >
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
       </tr>
 
     </tbody>
   </table>
 
-  <div class="alert alert-danger text-center mt-3">
+  <div
+    *ngIf="!loading && users.length === 0" 
+    class="alert alert-warning text-center mt-3 animated fadeIn faster"
+  >
     <h4 class="alert-heading">No hay registros</h4>
     <p>
         <i class="fa fa-exclamation fa-2x"></i>
@@ -45,7 +64,10 @@
 
 </div>
   
-<div class="alert alert-info text-center mt-3">
+<div
+  *ngIf="loading"
+  class="alert alert-info text-center mt-3 animated fadeIn faster"
+>
     <h4 class="alert-heading">Cargando</h4>
     <p>
         <i class="fa fa-sync-alt fa-spin fa-2x"></i>
